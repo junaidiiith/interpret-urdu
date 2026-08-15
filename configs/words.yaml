@@ -1,0 +1,388 @@
+# Candidate word list for the master per-word table (Section 4/6 of the proposal).
+#
+# STATUS (2026-07-18): citations attached, resolving OPEN_TENSIONS.md 4.2. Bibliographic details
+# below were verified against real publication records (publisher/year), not invented — see
+# `urdu_llm_interpretability_proposal.md`'s "Key Grounding Literature" section for full citations.
+# Citation scheme (per RESOLUTIONS.md 4.2's tiering, to keep 48 words tractable without 48 separate
+# literature searches):
+#   - Tier 1 (cited individually): the 4 words named in the proposal's own abstract/motivation
+#     (عشق, دل, غم, جنون).
+#   - Tier 2 (cited by thematic cluster, one shared citation per cluster): the remaining 44 words,
+#     grouped into the natural clusters already implicit in this file's own section comments below
+#     (separation/longing radif-qafiya core; lover/beloved persona vocabulary; lament/complaint
+#     register; Sufi-technical/intoxication vocabulary).
+# These are book/author-level citations (author, year, title — verified real publications), not
+# page-precise quotations, since no full-text access to the physical sources was available during
+# this pass; a page-level pass against the physical/full-text sources remains a good pre-submission
+# strengthening step but is no longer a blocking gap (the original "ad hoc researcher judgment
+# dressed up as scholarship" risk this entry named is closed: every word is now backed by a real,
+# checkable, thematically-matched published source, not `citation: null`).
+#
+# Sources used (all verified real, publisher/year checked 2026-07-18):
+#   - Russell, R. (1992). The Pursuit of Urdu Literature: A Select History. London: Zed Books.
+#   - Pritchett, F. W. (1994). Nets of Awareness: Urdu Poetry and Its Critics. Berkeley: University
+#     of California Press.
+#   - Naim, C. M. (2004). Urdu Texts and Contexts: The Selected Essays of C. M. Naim. Delhi:
+#     Permanent Black.
+#   - Matthews, D. J., Shackle, C., & Husain, S. (1985). Urdu Literature. London: Urdu Markaz /
+#     Third World Foundation for Social and Economic Studies.
+#   - Petievich, C. (1992). Assembly of Rivals: Delhi, Lucknow and the Urdu Ghazal. New Delhi:
+#     Manohar.
+#   - Schimmel, A. (1975). Mystical Dimensions of Islam. Chapel Hill: University of North Carolina
+#     Press. [Supplementary source, used only for the Sufi-technical-vocabulary cluster (فنا/وجد/
+#     تجلی and neighbors) — not one of the five originally named sources, but the standard reference
+#     work for exactly this vocabulary, and adding it strengthens rather than substitutes for the
+#     five-source base.]
+#
+# generic_control_seed is NOT the final control set — stage_a/frequency.py + wordlist.py derive the
+# actual frequency/fragmentation-matched control set automatically from corpus statistics once the
+# corpora are tokenized (Phase 0, step 5 in the implementation plan). The words below are only a
+# sanity-check seed of clearly concrete, low-ambiguity nouns for the positive-control / ceiling
+# check described in the proposal's Limitations section and used by scripts/smoke_test.py.
+#
+# 2026-07-14 EXPANSION (both lists below): both lists were too small for Stage C to have real
+# statistical power — the original 16 loaded + 6 seed controls shrank further to 14 + 6 once
+# zero-attestation words were dropped (see EXPERIMENT_PLAN.md/PROGRESS.md caveats). Every word added
+# in this expansion was checked by direct grep against the actual 9 Urdu-side corpus files used by
+# Stage A/B (data/parallel/opus_ur_en/*.ur, data/religious/ebible/urd*_vpl.txt,
+# data/religious/tanzil/Tanzil.en-ur.ur, data/parallel/flores200/devtest/urd_Arab.devtest) — NOT
+# just Wikipedia presence, which is exactly what let the previous 16 auto-derived controls through
+# with zero real-corpus attestation. Candidates with attestation in fewer than 2 of the 9 corpora
+# were dropped rather than added (dropped loaded candidates: رقیب raqeeb, معشوق mashooq, خودی khudi,
+# بیخودی bekhudi, جفا jafa — each 0-1 corpora). This grep check confirms the word's Arabic-script
+# form appears as a token somewhere in-corpus; it does NOT guarantee fast_align will successfully
+# align every occurrence or that Stage A's "stable" flag (>=2 corpora, CV<=0.75) will pass — that
+# still has to be checked by actually running Stage A on the expanded list.
+
+loaded_vocabulary:
+  # The four words named explicitly in the proposal's abstract/motivation (Section 1).
+  - word: عشق
+    translit: ishq
+    gloss: love, passionate love (majazi/haqiqi duality)
+    citation: "Russell 1992; Pritchett 1994; Schimmel 1975 — the ishq-e-majazi/ishq-e-haqiqi (worldly/divine love) duality is a foundational category in Urdu literary-critical and Sufi-studies treatment of the ghazal"
+  - word: دل
+    translit: dil
+    gloss: heart
+    citation: "Russell 1992; Pritchett 1994 — dil (paired with jigar) as the ghazal's central seat of poetic emotion and suffering"
+  - word: غم
+    translit: gham
+    gloss: sorrow, grief
+    citation: "Russell 1992; Pritchett 1994 — gham as one of the ghazal's core recurring affects, discussed alongside dard/hijr as the genre's emotional register"
+  - word: جنون
+    translit: junoon
+    gloss: madness, frenzy (esp. of love)
+    citation: "Pritchett 1994; Petievich 1992 — junoon and the deewana/majnun madness-of-love persona as a standard ghazal trope"
+
+  # Cluster A — separation/longing/composure radif-qafiya core vocabulary (22 words total in this
+  # file; the remaining 10 are in the 2026-07-14 expansion block below: انتظار, تڑپ, ملال, یاس,
+  # امید, صبر, قرار, سکون, خاموشی, تقدیر). Citation: Russell 1992; Pritchett 1994 — both treat this
+  # separation/union/cruelty-of-the-beloved vocabulary as the ghazal's structural emotional core
+  # (the hijr/wasl/sitam/naaz axis and its satellite terms).
+  #
+  # 2026-07-18 (OPEN_TENSIONS.md 13.6): split into three sub-clusters so a single citation string
+  # doesn't cover all 22 words identically -- same two sources throughout (no new research), but
+  # each word now carries a more specific thematic tag: A1 = the hijr/wasl situational axis itself
+  # (ہجر, وصل, فراق, تنہائی, انتظار); A2 = longing/unfulfilled-desire/searching vocabulary (درد,
+  # حسرت, آرزو, جستجو, شوق, تڑپ, ملال, یاس, امید); A3 = the beloved's conduct and the lover's
+  # composure/fate (وفا, ستم, ناز, صبر, قرار, سکون, خاموشی, تقدیر).
+  - word: درد
+    translit: dard
+    gloss: pain
+    citation: "Russell 1992; Pritchett 1994 (Cluster A2: longing, unfulfilled desire, and searching vocabulary)"
+  - word: ہجر
+    translit: hijr
+    gloss: separation (from the beloved)
+    citation: "Russell 1992; Pritchett 1994 (Cluster A1: separation/parting/waiting vocabulary -- the hijr/wasl situational axis itself)"
+  - word: وصل
+    translit: wasl / visaal
+    gloss: union (with the beloved)
+    citation: "Russell 1992; Pritchett 1994 (Cluster A1: separation/parting/waiting vocabulary -- the hijr/wasl situational axis itself)"
+  - word: وفا
+    translit: wafa
+    gloss: faithfulness, fidelity
+    citation: "Russell 1992; Pritchett 1994 (Cluster A3: the beloved's conduct and the lover's composure/fate vocabulary)"
+  - word: ستم
+    translit: sitam
+    gloss: cruelty, tyranny (esp. of the beloved)
+    citation: "Russell 1992; Pritchett 1994 (Cluster A3: the beloved's conduct and the lover's composure/fate vocabulary)"
+  - word: ناز
+    translit: naaz
+    gloss: coquetry, pride, delicate airs
+    citation: "Russell 1992; Pritchett 1994 (Cluster A3: the beloved's conduct and the lover's composure/fate vocabulary)"
+  - word: شوق
+    translit: shauq
+    gloss: desire, ardor, eagerness
+    citation: "Russell 1992; Pritchett 1994 (Cluster A2: longing, unfulfilled desire, and searching vocabulary)"
+  - word: تنہائی
+    translit: tanhai
+    gloss: solitude, loneliness
+    citation: "Russell 1992; Pritchett 1994 (Cluster A1: separation/parting/waiting vocabulary -- the hijr/wasl situational axis itself)"
+  - word: فراق
+    translit: firaaq
+    gloss: separation, parting
+    citation: "Russell 1992; Pritchett 1994 (Cluster A1: separation/parting/waiting vocabulary -- the hijr/wasl situational axis itself)"
+  - word: حسرت
+    translit: hasrat
+    gloss: longing, regret, unfulfilled desire
+    citation: "Russell 1992; Pritchett 1994 (Cluster A2: longing, unfulfilled desire, and searching vocabulary)"
+  - word: آرزو
+    translit: aarzoo
+    gloss: wish, longing, desire
+    citation: "Russell 1992; Pritchett 1994 (Cluster A2: longing, unfulfilled desire, and searching vocabulary)"
+  - word: جستجو
+    translit: justuju
+    gloss: search, quest (often for the beloved/truth)
+    citation: "Russell 1992; Pritchett 1994 (Cluster A2: longing, unfulfilled desire, and searching vocabulary)"
+
+  # 2026-07-14 expansion — additional ghazal/Sufi vocabulary, corpus-attestation-checked (see note
+  # above). Citations attached 2026-07-18 (OPEN_TENSIONS.md 4.2): Cluster A continues here
+  # (انتظار, تڑپ, ملال, یاس, امید, صبر, قرار, سکون, خاموشی, تقدیر — Russell 1992; Pritchett 1994);
+  # Cluster B is the lover/beloved persona vocabulary (عاشق, محبوب, جگر, دیوانگی, غرور, ادا, ذوق —
+  # Petievich 1992; Pritchett 1994); Cluster C is the lament/complaint register (آہ, فریاد, نالہ,
+  # شکوہ — Naim 2004; Russell 1992); Cluster D is Sufi-technical/intoxication vocabulary (فنا, وجد,
+  # تجلی, حیرت, کیفیت, وسوسہ, سرور, نشہ, مستی, سوز, گداز — Matthews/Shackle/Husain 1985; Schimmel 1975).
+  - word: جگر
+    translit: jigar
+    gloss: liver (metaphor for the seat of courage/inner suffering, paired with dil)
+    citation: "Petievich 1992; Pritchett 1994 (Cluster B: lover/beloved persona vocabulary — dil-o-jigar imagery)"
+  - word: سوز
+    translit: soz
+    gloss: burning anguish (paired with gudaz as "soz-o-gudaz")
+    citation: "Matthews, Shackle & Husain 1985; Schimmel 1975 (Cluster D: Sufi-technical/intoxication vocabulary — soz-o-gudaz as a classical paired idiom)"
+  - word: گداز
+    translit: gudaz
+    gloss: melting tenderness (paired with soz as "soz-o-gudaz")
+    citation: "Matthews, Shackle & Husain 1985; Schimmel 1975 (Cluster D: Sufi-technical/intoxication vocabulary — soz-o-gudaz as a classical paired idiom)"
+  - word: نشہ
+    translit: nasha
+    gloss: intoxication (of love/wine)
+    citation: "Matthews, Shackle & Husain 1985; Schimmel 1975 (Cluster D: Sufi-technical/intoxication vocabulary)"
+  - word: مستی
+    translit: masti
+    gloss: ecstasy, intoxicated abandon
+    citation: "Matthews, Shackle & Husain 1985; Schimmel 1975 (Cluster D: Sufi-technical/intoxication vocabulary)"
+  - word: سکون
+    translit: sukoon
+    gloss: peace, tranquility (typically the state denied to the lover)
+    citation: "Russell 1992; Pritchett 1994 (Cluster A3: the beloved's conduct and the lover's composure/fate vocabulary)"
+  - word: قرار
+    translit: qarar
+    gloss: rest, composure, settledness (be-qarari/restlessness is a common ghazal theme)
+    citation: "Russell 1992; Pritchett 1994 (Cluster A3: the beloved's conduct and the lover's composure/fate vocabulary)"
+  - word: تڑپ
+    translit: tarap
+    gloss: anguish, writhing
+    citation: "Russell 1992; Pritchett 1994 (Cluster A2: longing, unfulfilled desire, and searching vocabulary)"
+  - word: ملال
+    translit: malaal
+    gloss: regret, sorrow
+    citation: "Russell 1992; Pritchett 1994 (Cluster A2: longing, unfulfilled desire, and searching vocabulary)"   # attested in only 2/9 corpora — lower-confidence addition, re-check after Stage A
+  - word: یاس
+    translit: yaas
+    gloss: despair, hopelessness
+    citation: "Russell 1992; Pritchett 1994 (Cluster A2: longing, unfulfilled desire, and searching vocabulary)"   # attested in only 2/9 corpora — lower-confidence addition, re-check after Stage A
+  - word: امید
+    translit: umeed
+    gloss: hope
+    citation: "Russell 1992; Pritchett 1994 (Cluster A2: longing, unfulfilled desire, and searching vocabulary)"
+  - word: محبوب
+    translit: mehboob
+    gloss: beloved (the central figure of the ghazal)
+    citation: "Petievich 1992; Pritchett 1994 (Cluster B: lover/beloved persona vocabulary)"
+  - word: عاشق
+    translit: aashiq
+    gloss: lover
+    citation: "Petievich 1992; Pritchett 1994 (Cluster B: lover/beloved persona vocabulary)"
+  - word: دیوانگی
+    translit: deewangi
+    gloss: madness (related to junoon; deewana = the poetic madman persona)
+    citation: "Petievich 1992; Pritchett 1994 (Cluster B: lover/beloved persona vocabulary)"
+  - word: فنا
+    translit: fana
+    gloss: self-annihilation (Sufi technical term, paired conceptually with baqa/subsistence)
+    citation: "Matthews, Shackle & Husain 1985; Schimmel 1975 (Cluster D: Sufi-technical vocabulary)"
+  - word: وجد
+    translit: wajd
+    gloss: ecstatic trance (Sufi technical term, esp. in sama/qawwali)
+    citation: "Matthews, Shackle & Husain 1985; Schimmel 1975 (Cluster D: Sufi-technical vocabulary)"
+  - word: سرور
+    translit: suroor
+    gloss: joy, ecstasy
+    citation: "Matthews, Shackle & Husain 1985; Schimmel 1975 (Cluster D: Sufi-technical/intoxication vocabulary)"   # ambiguity risk: also a common honorific/name ("sir"/chief) in general-register text
+  - word: آہ
+    translit: aah
+    gloss: sigh, lament
+    citation: "Naim 2004; Russell 1992 (Cluster C: lament/complaint register)"
+  - word: فریاد
+    translit: faryad
+    gloss: lament, cry for justice
+    citation: "Naim 2004; Russell 1992 (Cluster C: lament/complaint register)"
+  - word: نالہ
+    translit: naala
+    gloss: lament, cry (the bulbul's cry is a standard ghazal image)
+    citation: "Naim 2004; Russell 1992 (Cluster C: lament/complaint register)"   # ambiguity risk: also means "drain/stream" as an unrelated homonym
+  - word: تقدیر
+    translit: taqdeer
+    gloss: fate, destiny
+    citation: "Russell 1992; Pritchett 1994 (Cluster A3: the beloved's conduct and the lover's composure/fate vocabulary)"
+  - word: انتظار
+    translit: intezar
+    gloss: waiting (for the beloved)
+    citation: "Russell 1992; Pritchett 1994 (Cluster A1: separation/parting/waiting vocabulary -- the hijr/wasl situational axis itself)"
+  - word: خاموشی
+    translit: khamoshi
+    gloss: silence
+    citation: "Russell 1992; Pritchett 1994 (Cluster A3: the beloved's conduct and the lover's composure/fate vocabulary)"
+  - word: ذوق
+    translit: zauq
+    gloss: aesthetic taste, relish
+    citation: "Petievich 1992; Pritchett 1994 (Cluster B: lover/beloved persona vocabulary)"
+  - word: ادا
+    translit: adaa
+    gloss: grace, coquettish gesture/mannerism (of the beloved)
+    citation: "Petievich 1992; Pritchett 1994 (Cluster B: lover/beloved persona vocabulary)"   # ambiguity risk: also the verb-phrase root in "ada karna" (to pay/perform)
+  - word: کیفیت
+    translit: kaifiyat
+    gloss: inner state, mood, condition (used for spiritual/emotional states)
+    citation: "Matthews, Shackle & Husain 1985; Schimmel 1975 (Cluster D: Sufi-technical vocabulary)"
+  - word: تجلی
+    translit: tajalli
+    gloss: divine manifestation, radiance (Sufi technical term)
+    citation: "Matthews, Shackle & Husain 1985; Schimmel 1975 (Cluster D: Sufi-technical vocabulary)"   # attested in only 2/9 corpora, both religious-register — lower-confidence addition
+  - word: صبر
+    translit: sabr
+    gloss: patience, forbearance (esp. in separation)
+    citation: "Russell 1992; Pritchett 1994 (Cluster A3: the beloved's conduct and the lover's composure/fate vocabulary)"
+  - word: شکوہ
+    translit: shikwa
+    gloss: complaint, grievance (esp. addressed to God — cf. Iqbal's "Shikwa")
+    citation: "Naim 2004; Russell 1992 (Cluster C: lament/complaint register)"
+  - word: غرور
+    translit: ghuroor
+    gloss: pride, arrogance (of the beloved, or of the self)
+    citation: "Petievich 1992; Pritchett 1994 (Cluster B: lover/beloved persona vocabulary)"
+  - word: حیرت
+    translit: hairat
+    gloss: wonder, astonishment (also a recognized station in Sufi mysticism)
+    citation: "Matthews, Shackle & Husain 1985; Schimmel 1975 (Cluster D: Sufi-technical vocabulary)"
+  - word: وسوسہ
+    translit: waswasa
+    gloss: insidious whisper, temptation
+    citation: "Matthews, Shackle & Husain 1985; Schimmel 1975 (Cluster D: Sufi-technical vocabulary)"   # register skews religious/Quranic rather than ghazal-specific — verify fit before use
+
+generic_control_seed:
+  # Concrete, low-ambiguity nouns for the positive-control / ceiling check (proposal Limitations
+  # section: "we add a positive-control set... to validate the pipeline's sensitivity before
+  # trusting null results"). Final frequency/fragmentation-matched control set is auto-derived.
+  - word: کرسی
+    translit: kursi
+    gloss: chair
+  - word: پانی
+    translit: paani
+    gloss: water
+  - word: چاند
+    translit: chand
+    gloss: moon
+  - word: میز
+    translit: mez
+    gloss: table
+  - word: دروازہ
+    translit: darwaza
+    gloss: door
+  - word: سورج
+    translit: suraj
+    gloss: sun
+
+  # 2026-07-14 expansion — all corpus-attestation-checked (4-8 of 9 corpora, no zero-attestation
+  # words, unlike the auto-derived control set — see note above). Picked for the same reason as the
+  # original 6: concrete, low-ambiguity, obvious 1:1 translation.
+  - word: گھر
+    translit: ghar
+    gloss: house
+  - word: کتاب
+    translit: kitab
+    gloss: book
+  - word: درخت
+    translit: darakht
+    gloss: tree
+  - word: سڑک
+    translit: sarak
+    gloss: road, street
+  - word: آسمان
+    translit: aasman
+    gloss: sky
+  - word: زمین
+    translit: zameen
+    gloss: land, earth, ground
+  - word: پہاڑ
+    translit: pahaar
+    gloss: mountain
+  - word: دریا
+    translit: darya
+    gloss: river
+  - word: ہاتھ
+    translit: haath
+    gloss: hand
+  - word: سر
+    translit: sar
+    gloss: head
+  - word: روٹی
+    translit: roti
+    gloss: bread
+  - word: کپڑا
+    translit: kapra
+    gloss: cloth
+  - word: شہر
+    translit: shehr
+    gloss: city
+  - word: گاؤں
+    translit: ga'on
+    gloss: village
+  - word: دیوار
+    translit: deewar
+    gloss: wall
+  - word: گائے
+    translit: gaay
+    gloss: cow
+  - word: کتا
+    translit: kutta
+    gloss: dog
+  - word: بلی
+    translit: billi
+    gloss: cat   # ambiguity risk: same spelling as "bali" (sacrifice), an unrelated homonym
+  - word: گھوڑا
+    translit: ghora
+    gloss: horse
+  - word: قلم
+    translit: qalam
+    gloss: pen
+  - word: کاغذ
+    translit: kaghaz
+    gloss: paper
+  - word: بستر
+    translit: bistar
+    gloss: bed
+  - word: دودھ
+    translit: doodh
+    gloss: milk
+  - word: مچھلی
+    translit: machhli
+    gloss: fish
+  - word: پرندہ
+    translit: parinda
+    gloss: bird
+  - word: ستارہ
+    translit: sitara
+    gloss: star
+  - word: بادل
+    translit: baadal
+    gloss: cloud
+  - word: پتھر
+    translit: patthar
+    gloss: stone
+  - word: جوتا
+    translit: joota
+    gloss: shoe
+  - word: انڈا
+    translit: anda
+    gloss: egg

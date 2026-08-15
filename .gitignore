@@ -216,3 +216,14 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+.venv
+data*
+
+old_version*
+results/
+
+artifacts/*
+docs/*
+.claude*
+CHR-Urdu-LLM-Conceptualization*

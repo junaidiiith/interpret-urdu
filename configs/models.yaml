@@ -1,0 +1,139 @@
+# Model registry for Stages B/D/E (interlingua anchoring, log-prob, cross-model replication).
+# Repo IDs and revisions verified against the HF Hub on 2026-07-12; pin by commit sha so a
+# run_manifest.json can record exactly which snapshot produced a given result (Section 11 of
+# the proposal).
+#
+# NOTE on Section 5 role coverage: this registry is the user-specified set of small (~0.8-4B)
+# checkpoints actually available/verified in this environment. It gives two base/instruct model
+# families for the general-purpose role, a within-family size-scaling pair (Qwen3.5 0.8B vs 2B)
+# as an additional robustness axis not in the original Section 5 language, and one architecturally
+# distinct smaller model (SmolLM3) as the "older/smaller robustness check" role. No checkpoint here
+# fulfills the "stronger reported multilingual balance" (Aya-class) or "Urdu-adapted / continued-
+# pretrained specialist" roles from Section 5 — that's a real gap against the proposal text, not a
+# silent substitution, and Section 5 should be revised to describe this registry before submission.
+
+models:
+  - key: gemma3n-e2b-instruct
+    role: general_purpose_1
+    hf_repo: google/gemma-3n-E2B-it
+    revision: 5e092ebca197cdcd8d8b195040accf22693501bc
+    gated: true          # accepted under the junaidiiith HF account
+    variant: instruct
+    family: gemma-3n
+
+  - key: gemma3n-e4b-base
+    role: general_purpose_1_base
+    hf_repo: google/gemma-3n-E4B
+    revision: af70430f84ea4d7ac191aaa2bd8e14d2a5e8f6ee
+    gated: true
+    variant: base
+    family: gemma-3n
+
+  - key: qwen3.5-0.8b-base
+    role: general_purpose_2_base
+    hf_repo: Qwen/Qwen3.5-0.8B-Base
+    revision: dc7cdfe2ee4154fa7e30f5b51ca41bfa40174e68
+    gated: false
+    variant: base
+    family: qwen3.5
+
+  - key: qwen3.5-0.8b-instruct
+    role: general_purpose_2
+    hf_repo: Qwen/Qwen3.5-0.8B
+    revision: 2fc06364715b967f1860aea9cf38778875588b17
+    gated: false
+    variant: instruct
+    family: qwen3.5
+
+  - key: qwen3.5-2b-base
+    role: size_scaling_base
+    hf_repo: Qwen/Qwen3.5-2B-Base
+    revision: b1485b2fa6dfa1287294f269f5fb618e03d52d7c
+    gated: false
+    variant: base
+    family: qwen3.5
+
+  - key: qwen3.5-2b-instruct
+    role: size_scaling_instruct
+    hf_repo: Qwen/Qwen3.5-2B
+    revision: 15852e8c16360a2fea060d615a32b45270f8a8fc
+    gated: false
+    variant: instruct
+    family: qwen3.5
+
+  - key: smollm3-3b-instruct
+    role: robustness_smaller_arch
+    hf_repo: HuggingFaceTB/SmolLM3-3B
+    revision: a07cc9a04f16550a088caea529712d1d335b0ac1
+    gated: false
+    variant: instruct
+    family: smollm3
+
+  - key: smollm3-3b-base
+    role: robustness_smaller_arch_base
+    hf_repo: HuggingFaceTB/SmolLM3-3B-Base
+    revision: d78a42f79198603e614095753484a04c10c2b940
+    gated: false
+    variant: base
+    family: smollm3
+
+# ---------------------------------------------------------------------------------------------
+# Fine-tuning arm (2026-07-18): does giving a model real exposure to Urdu literary text change
+# RQ1/RQ2, tested as a real before/after comparison rather than a correlational cross-model one.
+# Each entry below is a LoRA-continued-pretrained variant of an existing base model above (same
+# key + "-urdu-ft" suffix), trained on the Rekhta ghazal+nazm corpus (results/urdu_finetune_corpus/,
+# built by scripts/prepare_urdu_finetune_corpus.py) via scripts/finetune_urdu_lora.py, then merged
+# to a full local checkpoint (see each checkpoint's own finetune_manifest.json for exact
+# hyperparameters). hf_repo is a local filesystem path, not a HF Hub repo -- `revision: null` is
+# required so `from_pretrained` doesn't try to resolve a Hub revision against a local directory.
+#
+# IMPORTANT: these are deliberately NOT analyzed by the main 8-model pipeline (run_stage_c.py,
+# analyze_architecture_breakdown.py, analyze_stage_b_diagnostics.py, plot_frequency_confound.py,
+# analyze_layer_trends.py, run_stage_e_transliteration.py all explicitly skip any model key ending
+# in "-urdu-ft") -- mixing them into those scripts' BH-correction families would retroactively
+# shift the already-finalized 8-model q-values reported in the paper. Analyzed instead by
+# scripts/analyze_finetuning_effect.py, which pairs each fine-tuned model against its own
+# pre-fine-tuning numbers (already on disk from the main study) as its own separate comparison.
+  - key: qwen3.5-0.8b-base-urdu-ft
+    role: urdu_finetuning_arm
+    hf_repo: /home/sali/CMAI-Projects/interpret-urdu/results/finetuned_models/qwen3.5-0.8b-base-urdu-ft
+    revision: null
+    gated: false
+    variant: base
+    family: qwen3.5
+    finetuned_from: qwen3.5-0.8b-base
+
+  - key: smollm3-3b-base-urdu-ft
+    role: urdu_finetuning_arm
+    hf_repo: /home/sali/CMAI-Projects/interpret-urdu/results/finetuned_models/smollm3-3b-base-urdu-ft
+    revision: null
+    gated: false
+    variant: base
+    family: smollm3
+    finetuned_from: smollm3-3b-base
+
+  - key: qwen3.5-2b-base-urdu-ft
+    role: urdu_finetuning_arm
+    hf_repo: /home/sali/CMAI-Projects/interpret-urdu/results/finetuned_models/qwen3.5-2b-base-urdu-ft
+    revision: null
+    gated: false
+    variant: base
+    family: qwen3.5
+    finetuned_from: qwen3.5-2b-base
+
+  - key: gemma3n-e4b-base-urdu-ft
+    role: urdu_finetuning_arm
+    hf_repo: /home/sali/CMAI-Projects/interpret-urdu/results/finetuned_models/gemma3n-e4b-base-urdu-ft
+    revision: null
+    gated: false
+    variant: base
+    family: gemma-3n
+    finetuned_from: gemma3n-e4b-base
+
+# Measured Urdu tokenizer fragmentation (subword pieces per whitespace-delimited word) on a short
+# sample sentence, 2026-07-12 spike -- informs Stage A's fragmentation covariate and is *not* a
+# substitute for computing it properly per-word over the actual candidate list in stage_a/frequency.py.
+tokenizer_fragmentation_spike:
+  gemma3n-e2b-instruct: 1.36
+  qwen3.5-0.8b-base: 1.55
+  smollm3-3b-instruct: 2.00

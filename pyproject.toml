@@ -1,0 +1,39 @@
+[project]
+name = "urdu-interp"
+version = "0.1.0"
+description = "Script-controlled Urdu/Hindi/English representational convergence, logit-lens detour, and LoRA fine-tuning-effect pipeline"
+requires-python = ">=3.11"
+dependencies = [
+    "torch",
+    "transformers>=4.44",
+    "accelerate",
+    "scikit-learn",
+    "scipy",
+    "statsmodels",
+    "pandas",
+    "numpy",
+    "datasets",
+    "huggingface_hub",
+    "sentencepiece",
+    "protobuf",
+    "pyyaml",
+    "tqdm",
+    "beautifulsoup4",
+    "lxml",
+    "pillow",
+    "timm",
+    "matplotlib",
+    "peft",
+    "openai",
+    "python-dotenv",
+]
+
+[project.optional-dependencies]
+dev = ["pytest"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"

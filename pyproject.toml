@@ -1,7 +1,7 @@
 [project]
 name = "urdu-interp"
 version = "0.1.0"
-description = "Script-controlled Urdu/Hindi/English representational convergence, logit-lens detour, and LoRA fine-tuning-effect pipeline"
+description = "Mechanistic interpretability toolkit for Urdu (RQ1 convergence, RQ2 Patchscopes/causal patching, RQ3 LoRA) — companion code for the CHR 2027 paper"
 requires-python = ">=3.11"
 dependencies = [
     "torch",
